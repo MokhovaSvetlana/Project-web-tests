@@ -1,9 +1,9 @@
 import sqlalchemy
-from data.db_session import SqlAlchemyBase
+from data.db import Base
 from sqlalchemy import orm
 
 
-class Test(SqlAlchemyBase):
+class Test(Base):
 
     __tablename__ = 'tests'
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)

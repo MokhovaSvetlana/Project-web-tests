@@ -1,11 +1,12 @@
 import sqlalchemy
-from .db_session import SqlAlchemyBase
+from data.db import Base
 from sqlalchemy import orm
+from .offered_tests import association_table
 
 
 association_table = sqlalchemy.Table(
     'CompletedTests_to_Users',
-    SqlAlchemyBase.metadata,
+    Base.metadata,
     sqlalchemy.Column('users', sqlalchemy.Integer,
                       sqlalchemy.ForeignKey('tests.id')),
     sqlalchemy.Column('tests', sqlalchemy.Integer,
@@ -14,7 +15,7 @@ association_table = sqlalchemy.Table(
 )
 
 
-class User(SqlAlchemyBase):
+class User(Base):
 
     __tablename__ = 'users'
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="text-center" style="padding: 5% 0 0 0">
+    <h1>Прохождение теста</h1>
+    <h2>{{ test.name }}</h2>
+  </div>
+
+  <div style="margin: 5% 0">
+  <form class="tasks" method="post">
+      {% for question in test['questions'] %}
+      <div class="card" style="padding: 5%; margin: 2% 0 0 0">
+          Вопрос<br><b>{{ question.question }}</b><br>
+          Ответ<br><input class="form-control" id="{{question['number']}}" name="{{question['number']}}"><br>
+      </div>
+      {% endfor %}
+      <button type="submit" class="btn btn-primary" style="margin: 2% 0 0 0">Отправить ответы</button>
+  </form>
+  </div>
+{% endblock %}

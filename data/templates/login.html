@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <form action="" method="post">
+        <div style="margin: 10% 0">
+             <div class="card" style="padding: 5%;">
+                    <div class="cord-body d-flex flex-row">
+                        <h1>Авторизация</h1>
+                    </div>
+                {{ form.hidden_tag() }}
+                <p>
+                    {{ form.login.label }}<br>
+                    {{ form.login(class="form-control") }}<br>
+                    {% for error in form.login.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form.password.label }}<br>
+                    {{ form.password(class="form-control", type="password") }}<br>
+                    {% for error in form.password.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+                </p>
+                <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+                <div>{{ message }}</div>
+             </div><br>
+             <a class="btn btn-success" href="/register">Зарегестрироваться</a>
+        </div>
+    </form>
+{% endblock %}

@@ -1,10 +1,10 @@
 import sqlalchemy
-from data.db_session import SqlAlchemyBase
+from data.db import Base
 
 
 association_table = sqlalchemy.Table(
     'Categories_to_Tests',
-    SqlAlchemyBase.metadata,
+    Base.metadata,
     sqlalchemy.Column('categories', sqlalchemy.Integer,
                       sqlalchemy.ForeignKey('tests.id')),
     sqlalchemy.Column('tests', sqlalchemy.Integer,
@@ -13,7 +13,7 @@ association_table = sqlalchemy.Table(
 
 association2_table = sqlalchemy.Table(
     'Categories_to_Offered_Tests',
-    SqlAlchemyBase.metadata,
+    Base.metadata,
     sqlalchemy.Column('categories', sqlalchemy.Integer,
                       sqlalchemy.ForeignKey('offered_tests.id')),
     sqlalchemy.Column('offered_tests', sqlalchemy.Integer,
@@ -21,7 +21,7 @@ association2_table = sqlalchemy.Table(
 )
 
 
-class Category(SqlAlchemyBase):
+class Category(Base):
 
     __tablename__ = 'categories'
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)

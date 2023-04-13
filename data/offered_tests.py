@@ -1,11 +1,11 @@
 import sqlalchemy
-from data.db_session import SqlAlchemyBase
+from data.db import Base
 from sqlalchemy import orm
 
 
 association_table = sqlalchemy.Table(
     'OfferedTests_to_Users',
-    SqlAlchemyBase.metadata,
+    Base.metadata,
     sqlalchemy.Column('offered_tests', sqlalchemy.Integer,
                       sqlalchemy.ForeignKey('users.id')),
     sqlalchemy.Column('users', sqlalchemy.Integer,
@@ -13,7 +13,7 @@ association_table = sqlalchemy.Table(
 )
 
 
-class OfferedTest(SqlAlchemyBase):
+class OfferedTest(Base):
     __tablename__ = 'offered_tests'
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     name = sqlalchemy.Column(sqlalchemy.String, unique=False, nullable=False)
