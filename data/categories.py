@@ -1,5 +1,5 @@
 import sqlalchemy
-from data.db import Base
+from .db import Base
 
 
 association_table = sqlalchemy.Table(
@@ -8,15 +8,6 @@ association_table = sqlalchemy.Table(
     sqlalchemy.Column('categories', sqlalchemy.Integer,
                       sqlalchemy.ForeignKey('tests.id')),
     sqlalchemy.Column('tests', sqlalchemy.Integer,
-                      sqlalchemy.ForeignKey('categories.id'))
-)
-
-association2_table = sqlalchemy.Table(
-    'Categories_to_Offered_Tests',
-    Base.metadata,
-    sqlalchemy.Column('categories', sqlalchemy.Integer,
-                      sqlalchemy.ForeignKey('offered_tests.id')),
-    sqlalchemy.Column('offered_tests', sqlalchemy.Integer,
                       sqlalchemy.ForeignKey('categories.id'))
 )
 

@@ -1,13 +1,15 @@
 from flask import render_template, redirect, request
 from werkzeug.security import generate_password_hash, check_password_hash
-from data.forms import LoginForm, RegisterForm
+from .forms import LoginForm, RegisterForm
 from flask import g
 from data.users import User
 from flask import Blueprint
-from data.db import db_session as db
+from .db import db_session as db
 from flask import session
 import functools
 from database import DataBase
+from .checking_results import checking_results
+from .checking_creating_test import do_result_table
 
 
 bp = Blueprint("main", __name__)
@@ -70,24 +72,11 @@ def register():
         elif DataBase().get_user_by_login(form.login.data):
             return render_template('register.html', title='Авторизация', form=form,
                                    message="Этот логин уже используется")
-        user = User()
-        user.login = form.login.data
-        user.password = generate_password_hash(form.password.data)
-        db.add(user)
-        db.commit()
+        DataBase().add_new_user(form.login.data, generate_password_hash(form.password.data))
+        user = DataBase().get_user_by_login(form.login.data)
         session["user_id"] = user.id
         return redirect("/alltests")
     return render_template('register.html', title='Регистрация', form=form)
-
-
-@bp.route("/userpage")
-def user_page():
-    tests = []
-    for test in DataBase().get_tests_by_author_id(g.user.id):
-        test['author'] = DataBase().get_login_by_id(test['author'])
-        tests.append(test)
-    return render_template("user_page.html", title="Личная страница",
-                           user_tests=tests)
 
 
 @bp.route("/alltests")
@@ -95,10 +84,10 @@ def user_page():
 def all_tests(category=None):
     tests = []
     for test in DataBase().get_tests(category):
-        test['author'] = DataBase().get_login_by_id(test['author'])
-        tests.append(test)
-    return render_template("all_tests.html", tests=tests,
-                           categories=DataBase().get_categories(), title="Все тесты")
+        if test['approved']:
+            test['author'] = DataBase().get_login_by_id(test['author'])
+            tests.append(test)
+    return render_template("all_tests.html", tests=tests, title="Все тесты")
 
 
 @bp.route("/selectcategory")
@@ -110,12 +99,38 @@ def select_category():
 @bp.route("/dotest/<test_id>", methods=['GET', 'POST'])
 def do_test(test_id):
     if request.method == "POST":
-        print(request.form)
+        answers = [str(request.form[ix]) for ix in request.form]
+        result_of_user = checking_results(DataBase().get_test_by_id(id=test_id), answers)
+        DataBase().add_result(test_id, g.user.id, result_of_user)
+        if 'points' in result_of_user:
+            return redirect(f"/resulttest/{result_of_user['result']}/"
+                            f"{result_of_user['max_points']}/{result_of_user['points']}")
+        return redirect(f"/resulttest/{result_of_user['result']}")
     return render_template("do_test.html", test=DataBase().get_test_by_id(id=test_id),
                            title="Прохождение теста")
 
 
-@bp.route("/resulttes/<all_score>/<score>")
-def result_test(all_score, score):
-    return render_template("result_test.html", all_score=all_score, score=score)
+@bp.route("/resulttest/<result>")
+@bp.route("/resulttest/<result>/<max_points>/<points>")
+def result_test(result, max_points='', points=''):
+    return render_template("result_test.html", result=result, all_score=max_points, score=points)
+
+
+@bp.route("/userpage")
+def user_page():
+    tests = []
+    for test in DataBase().get_tests_by_author_id(g.user.id):
+        test['author'] = DataBase().get_login_by_id(test['author'])
+        tests.append(test)
+    completed_tests = DataBase().get_completed_tests_by_id(g.user.id)
+    return render_template("user_page.html", title="Личная страница",
+                           user_tests=tests, completed_tests=completed_tests)
+
+
+@bp.route("/creatingtest", methods=['GET', 'POST'])
+def creating_test():
+    if request.method == "POST":
+        DataBase().offer_test(g.user.id, request.form, do_result_table(request.form))
+    return render_template("creating_test.html", title="Создание теста")
+
 

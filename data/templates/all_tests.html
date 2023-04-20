@@ -6,8 +6,11 @@
   <a class="btn btn-warning" href="/selectcategory">Выбрать категорию</a>
   {% for test in tests %}
   <div class="card" style="padding: 5%; margin: 2% 0">
-      <p>Название: {{ test.title }}</p>
+      <p>Название: {{ test.name }}</p>
       <p>Автор: {{ test.author }}</p>
+      {% if test.categories %}
+        <p>Категории: {{ test.categories }}</p>
+      {% endif %}
       <a class="btn btn-sm col-md-2" style="background-color: #772299; color: #FFFFFF;"
          href="/dotest/{{ test.id }}">Пройти</a>
   </div>

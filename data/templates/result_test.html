@@ -2,7 +2,10 @@
 {% block content %}
 <div class="text-center" style="padding: 5% 0 0 0">
     <h1>Вы прошли тест</h1>
-    <h2>Ваш результат: </h2>
-    <h1>{{ all_score }} / {{ score }}</h1>
+    <h2 style="padding: 3% 0 0 0;">Ваш результат: </h2>
+    <h1>{{ result }}</h1>
+    {% if score %}
+        <h1>{{ score }} / {{ all_score }} баллов</h1>
+    {% endif %}
 </div>
 {% endblock %}

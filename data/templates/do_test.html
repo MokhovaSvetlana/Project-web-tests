@@ -7,12 +7,26 @@
 
   <div style="margin: 5% 0">
   <form class="tasks" method="post">
+
       {% for question in test['questions'] %}
       <div class="card" style="padding: 5%; margin: 2% 0 0 0">
           Вопрос<br><b>{{ question.question }}</b><br>
-          Ответ<br><input class="form-control" id="{{question['number']}}" name="{{question['number']}}"><br>
+
+          {% for answer in question['answers'] %}
+          <div class="form-check">
+              <input class="form-check-input" type="radio" name="{{ question['number'] }}"
+                     id="{{ question['number'] }}.{{ answer }}"
+                     value="{{ answer }}"
+                     {% if loop.first %} checked {% endif %}>
+              <label class="form-check-label" for="{{ question['number'] }}.{{ answer }}">
+              {{ answer }}
+              </label>
+          </div>
+          {% endfor %}
+
       </div>
       {% endfor %}
+
       <button type="submit" class="btn btn-primary" style="margin: 2% 0 0 0">Отправить ответы</button>
   </form>
   </div>

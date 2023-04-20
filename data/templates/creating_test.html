@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <div class="text-center" style="padding: 5% 0 0 0">
+        <h1>Создание теста</h1>
+    </div>
+    <form class="tasks" method="post">
+        <div style="padding: 5%; margin: 2% 0 0 0;">
+            <b>Название теста</b><br>
+            <input id="test_name" name="test_name"><br><br>
+            <b>Тема</b><br>
+            <input id="themes" name="themes"><br>
+        </div>
+        <a class="btn btn-info" id="plusQuestion">+</a><br><br>
+
+        <div style="padding: 5%; margin: 2% 0 0 0;">
+            <div class="form-check" style="padding: 5% 0 0 0;">
+                <input  type="checkbox" name="with_points" id="with_points" value="with_points" checked>
+                <label class="form-check-label" for="with_points">Показывать баллы за тесты</label>
+            </div>
+            <input id="result_message_max" name="result_message_max" placeholder="Сообщение при максимальном результате"
+                   class="col-md-10"><br><br>
+            <a class="btn btn-info" id="plusResultDivision">Добавить деление результатов</a><br><br>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Отправить</button>
+    </form>
+<script src="{{url_for('static', filename='scripts/creating_test.js')}}"></script>
+{% endblock %}

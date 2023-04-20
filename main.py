@@ -1,6 +1,6 @@
 from data.db import init_db
 from data.__init__ import create_app
-from database import add_info
+# from .database import add_test_info, add_test
 
 
 if __name__ == '__main__':

@@ -1,11 +1,24 @@
 {% extends "base.html" %}
 {% block content %}
     <h1 class="text-center" style="padding: 2% 0 2% 0" >Страница Пользователя {{ g.user.login }}</h1>
-
+    <a class="btn btn-info" href="/creatingtest">Создать тест</a>
     <h1 style="padding: 1% 0 0 0">Мои тесты</h1>
     {% for test in user_tests %}
     <div class="card" style="padding: 5%; margin: 2% 0">
-        <p>Название: {{ test.title }}</p>
+        <p>Название: {{ test.name }}</p>
+        {% if test.approved %}
+            <p>Статус:</p> <p style="color:#33CC33">одобрено</p>
+        {% else %}
+            <p>Статус:</p> <p style="color:#FF9900">отправлено</p>
+        {% endif %}
+    </div>
+    {% endfor %}
+    <h1 style="padding: 1% 0 0 0">Моя статистика</h1>
+    {% for c_test in completed_tests %}
+    <div class="card" style="padding: 5%; margin: 2% 0">
+        <p>Название: {{ c_test.name }}</p>
+        <p>Автор: {{ c_test.author_login }}</p>
+        <p>Результат: {{ c_test.result }}</p>
     </div>
     {% endfor %}
 {% endblock %}
