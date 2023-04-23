@@ -29,7 +29,7 @@
                 <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
                 <div>{{ message }}</div>
              </div><br>
-             <a class="btn btn-success" href="/register">Зарегестрироваться</a>
+             <a class="btn btn-success" href="{{ url_for('user.register') }}">Зарегестрироваться</a>
         </div>
     </form>
 {% endblock %}

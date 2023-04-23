@@ -1,7 +1,8 @@
 const plusQuestion = document.getElementById("plusQuestion");
+const minusQuestion = document.getElementById("minusQuestion");
 const plusResultDivision = document.getElementById("plusResultDivision");
-let questionNumber = 1
-let resultNumber = 1
+let questionNumber = 1;
+let resultNumber = 1;
 addQuestion();
 questionNumber++;
 
@@ -9,6 +10,13 @@ questionNumber++;
 plusQuestion.onclick = () => {
     addQuestion();
     questionNumber++;
+}
+
+minusQuestion.onclick = () => {
+    if (questionNumber > 2) {
+        questionNumber--;
+        deleteQuestion();
+    }
 }
 
 plusResultDivision.onclick = () => {
@@ -20,7 +28,7 @@ function addQuestion() {
     const parentDiv = plusQuestion.parentNode;
     const div = document.createElement('div');
     div.innerHTML = `
-        <div class="card" style="padding: 5%; margin: 3% 0 2% 0;">
+        <div class="card" style="padding: 5%; margin: 3% 0 2% 0;" id="${questionNumber}" name="${questionNumber}">
             <h5><b>Вопрос №${questionNumber}</b></h5>
             <textarea id="question${questionNumber}" name="question${questionNumber}"></textarea><br>
 
@@ -41,6 +49,11 @@ function addQuestion() {
         </div>
     `;
     parentDiv.insertBefore(div, plusQuestion);
+}
+
+function deleteQuestion(){
+    let el = document.getElementById(questionNumber);
+    el.remove();
 }
 
 

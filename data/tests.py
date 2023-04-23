@@ -43,7 +43,3 @@ class Test(Base):
 
     def to_json_for_results(self, test):
         return {'id': test.id, 'name': test.name, 'author': test.author}
-
-
-
-

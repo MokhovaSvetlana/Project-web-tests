@@ -17,12 +17,12 @@
         </div >
 
         {% if g.user %}
-            <div class="col-md-2"><a class="btn btn-warning" href="/alltests">Все тесты</a></div>
-            <div class="col-md-3"><a href="/userpage" class="text-decoration-none text-reset"><h1>
+            <div class="col-md-2"><a class="btn btn-warning" href="{{ url_for('tests.all_tests') }}">Все тесты</a></div>
+            <div class="col-md-3"><a href="{{ url_for('tests.user_page') }}" class="text-decoration-none text-reset"><h1>
                 {{ g.user.login }}</h1></a></div>
-            <div class="col-md-1 text-end"><a class="btn btn-danger" href="/logout">Выйти</a></div>
+            <div class="col-md-1 text-end"><a class="btn btn-danger" href="{{ url_for('user.logout') }}">Выйти</a></div>
         {% else %}
-             <div class="col-md-6 text-end"><a class="btn btn-success" href="/login">Войти</a></div>
+            <div class="col-md-6 text-end"><a class="btn btn-success" href="{{ url_for('user.login') }}">Войти</a></div>
         {% endif %}
     </div>
     <div style="margin: 2% 25%;">

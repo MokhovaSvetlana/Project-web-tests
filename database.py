@@ -1,10 +1,11 @@
+import json
+from werkzeug.security import generate_password_hash
+
 from data.users import User
 from data.tests import Test
 from data.categories import Category
 from data.results import Result
-import json
 from data.db import db_session as db
-from werkzeug.security import generate_password_hash
 
 
 class DataBase:
@@ -54,7 +55,6 @@ class DataBase:
     def get_categories():
         return Category.query.all()
 
-
     @staticmethod
     def get_tests(category=None):
         tests = Test.query.all()
@@ -68,6 +68,10 @@ class DataBase:
                 if category in categories:
                     tests_to_return.append(Test().to_json(test))
         return tests_to_return
+
+    @staticmethod
+    def get_result_by_id(id):
+        return Result.query.filter(Result.id == id).first()
 
     @staticmethod
     def add_new_user(login, password):
@@ -90,6 +94,16 @@ class DataBase:
         user = User.query.filter(User.id == user_id).first()
         user.completed_tests.append(res)
         db.commit()
+        return res.id
+
+    @staticmethod
+    def set_names_to_authors_in_test(tests_without_author):
+        tests = []
+        for test in tests_without_author:
+            if test['approved']:
+                test['author'] = DataBase().get_login_by_id(test['author'])
+                tests.append(test)
+        return tests
 
     @staticmethod
     def offer_test(author_id, offered_test, results):
@@ -127,6 +141,20 @@ class DataBase:
         user.offered_tests.append(new_test)
         db.commit()
 
+    @staticmethod
+    def search_test(string):
+        tests = DataBase().get_tests()
+        required_tests = list()
+        words_in_string = string.split()
+        for test in tests:
+            if string in test['name'].lower():
+                required_tests.insert(0, test)
+            else:
+                for word in words_in_string:
+                    if word in test['name']:
+                        required_tests.append(test)
+        return required_tests
+
 
 def add_test_info():
     user1 = User()
@@ -138,7 +166,6 @@ def add_test_info():
     user3 = User()
     user3.login = 'Hermiona'
     user3.password = generate_password_hash('LoveBooks')
-
     test = Test()
     test.name = 'First Test'
     test.author = 1
@@ -152,29 +179,22 @@ def add_test_info():
     test.results = json.dumps({'0': 'Да Вы гуманитарий!',
                                '1': 'В вас есть потенциал математика!',
                                '2': 'Вы - профи в логике!'})
-
     cat = Category()
     cat.name = 'Logic'
     cat1 = Category()
     cat1.name = 'Math'
-
     res = Result()
     res.result = '8/10'
     res.test_id = 1
     user1.completed_tests.append(res)
     test.categories.append(cat)
-
     db.add(test)
-
     db.add(user1)
     db.add(user2)
     db.add(user3)
-
     db.add(cat)
     db.add(cat1)
-
     db.commit()
-
     DataBase().get_login_by_id(1)
     DataBase().get_tests('Logic')
 

@@ -1,6 +1,7 @@
 import sqlalchemy
-from .db import Base
 from sqlalchemy import orm
+
+from .db import Base
 from .tests import association_table_offered_tests
 
 

@@ -1,7 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
+  <a class="text-decoration-none text-reset" href="{{ url_for('tests.all_tests') }}">
+    <div class="card" style="padding: 5%; margin: 2% 0">
+      <h1>Все</h1>
+    </div>
+  </a>
   {% for category in categories %}
-  <a class="text-decoration-none text-reset" href="/alltests/{{ category.name }}">
+  <a class="text-decoration-none text-reset" href="{{ url_for('tests.all_tests', category=category.name) }}">
     <div class="card" style="padding: 5%; margin: 2% 0">
       <h1>{{ category.name }}</h1>
     </div>

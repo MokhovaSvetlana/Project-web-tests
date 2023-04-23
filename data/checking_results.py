@@ -27,4 +27,3 @@ def checking_results(test, answers):   # answers - list
         result_of_user['points'] = score
         result_of_user['max_points'] = max_score
     return result_of_user
-

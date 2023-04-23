@@ -11,7 +11,8 @@
             <b>Тема</b><br>
             <input id="themes" name="themes"><br>
         </div>
-        <a class="btn btn-info" id="plusQuestion">+</a><br><br>
+        <a class="btn btn-info" id="plusQuestion">+</a>
+        <a class="btn btn-info" id="minusQuestion">-</a><br><br>
 
         <div style="padding: 5%; margin: 2% 0 0 0;">
             <div class="form-check" style="padding: 5% 0 0 0;">
@@ -24,6 +25,7 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Отправить</button>
+        <h5 style="margin: 2% 0 0 0;">{{ message }}</h5>
     </form>
 <script src="{{url_for('static', filename='scripts/creating_test.js')}}"></script>
 {% endblock %}
