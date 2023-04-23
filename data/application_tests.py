@@ -1,4 +1,4 @@
-from flask import render_template, redirect, request
+from flask import render_template, redirect, request, url_for
 from flask import g
 from flask import Blueprint
 from .checking_results import checking_results
@@ -44,7 +44,7 @@ def do_test(test_id):
         answers = [str(request.form[ix]).split("||")[1] for ix in request.form]
         result_of_user = checking_results(DataBase().get_test_by_id(id=test_id), answers)
         res_id = DataBase().add_result(test_id, g.user.id, result_of_user)
-        return redirect(f"/resulttest/{res_id}")
+        return redirect(url_for('tests.result_test', res_id=res_id))
     return render_template("do_test.html", test=DataBase().get_test_by_id(id=test_id),
                            title="Прохождение теста")
 
@@ -83,7 +83,7 @@ def creating_test():
         except ValueError:
             return render_template("creating_test.html", title="Создание теста",
                                    message="Не назначены баллы в вопросах или результатах ")
-        return redirect(f"/testsent")
+        return redirect(url_for('tests.test_sent'))
     return render_template("creating_test.html", title="Создание теста")
 
 

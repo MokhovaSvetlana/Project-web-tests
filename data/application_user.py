@@ -2,7 +2,7 @@ import functools
 from flask import Blueprint
 from flask import session
 from flask import g
-from flask import render_template, redirect, request
+from flask import render_template, redirect, request, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from .forms import LoginForm, RegisterForm
@@ -17,7 +17,7 @@ def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if g.user is None:
-            return redirect("/")
+            return redirect(url_for('tests.index'))
         return view(**kwargs)
 
     return wrapped_view
@@ -40,7 +40,7 @@ def login():
         if user and check_password_hash(user.password, form.password.data):
             session.clear()
             session["user_id"] = user.id
-            return redirect("/alltests")
+            return redirect(url_for('tests.all_tests'))
         return render_template('login.html',
                                message="Неправильный логин или пароль",
                                form=form)
@@ -51,7 +51,7 @@ def login():
 @login_required
 def logout():
     session.clear()
-    return redirect("/")
+    return redirect(url_for('tests.index'))
 
 
 @bp.route('/register', methods=['GET', 'POST'])
@@ -67,5 +67,5 @@ def register():
         DataBase().add_new_user(form.login.data, generate_password_hash(form.password.data))
         user = DataBase().get_user_by_login(form.login.data)
         session["user_id"] = user.id
-        return redirect("/alltests")
+        return redirect(url_for('tests.all_tests'))
     return render_template('register.html', title='Регистрация', form=form)
