@@ -30,6 +30,18 @@ class DataBase:
         return user.login
 
     @staticmethod
+    def get_user_by_login(login):
+        return User.query.filter(User.login == login).first()
+
+    @staticmethod
+    def get_user_by_id(id):
+        return User.query.filter(User.id == id).first()
+
+    @staticmethod
+    def get_categories():
+        return Category.query.all()
+
+    @staticmethod
     def get_test_by_id(id):
         test = Test.query.filter(Test.id == id).first()
         return Test().to_json(test)
@@ -44,29 +56,27 @@ class DataBase:
         return tests_to_return
 
     @staticmethod
-    def get_user_by_login(login):
-        return User.query.filter(User.login == login).first()
-
-    @staticmethod
-    def get_user_by_id(id):
-        return User.query.filter(User.id == id).first()
-
-    @staticmethod
-    def get_categories():
-        return Category.query.all()
-
-    @staticmethod
     def get_tests(category=None):
         tests = Test.query.all()
         tests_to_return = list()
         if not category:
             for test in tests:
-                tests_to_return.append(Test().to_json(test))
+                if test.approved:
+                    tests_to_return.append(Test().to_json(test))
         else:
             for test in tests:
                 categories = [c.name for c in test.categories]
-                if category in categories:
+                if category in categories and test.approved:
                     tests_to_return.append(Test().to_json(test))
+        return tests_to_return
+
+    @staticmethod
+    def get_disapproved_tests():
+        tests = Test.query.all()
+        tests_to_return = list()
+        for test in tests:
+            if not test.approved:
+                tests_to_return.append(Test().to_json(test))
         return tests_to_return
 
     @staticmethod
@@ -97,12 +107,17 @@ class DataBase:
         return res.id
 
     @staticmethod
+    def approve_test(test_id):
+        test = Test.query.filter(Test.id == test_id).first()
+        test.approved = 1
+        db.commit()
+
+    @staticmethod
     def set_names_to_authors_in_test(tests_without_author):
         tests = []
         for test in tests_without_author:
-            if test['approved']:
-                test['author'] = DataBase().get_login_by_id(test['author'])
-                tests.append(test)
+            test['author'] = DataBase().get_login_by_id(test['author'])
+            tests.append(test)
         return tests
 
     @staticmethod

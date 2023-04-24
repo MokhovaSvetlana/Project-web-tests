@@ -90,3 +90,15 @@ def creating_test():
 @bp.route("/testsent")
 def test_sent():
     return render_template("test_sent.html", title="Тест отправлен")
+
+
+@bp.route("/approvingtests")
+def approving_tests():
+    tests = DataBase().set_names_to_authors_in_test(DataBase().get_disapproved_tests())
+    return render_template("approving_tests.html", tests=tests, title="Одобрить тесты")
+
+
+@bp.route("/approvetest/<test_id>")
+def approve_test(test_id):
+    DataBase().approve_test(test_id)
+    return redirect(url_for('tests.approving_tests'))

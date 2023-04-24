@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="text-center" style="padding: 10% 0 5% 0">
+    <h1>Одобрить тесты</h1>
+  </div>
+  {% for test in tests %}
+  <div class="card" style="padding: 5%; margin: 2% 0">
+      <p>Название: {{ test.name }}</p>
+      <p>Автор: {{ test.author }}</p>
+      {% if test.categories %}
+        <p>Категории: {{ test.categories }}</p>
+      {% endif %}
+      <a class="btn btn-sm col-md-2" style="background-color: #772299; color: #FFFFFF;"
+         href="{{ url_for('tests.do_test', test_id=test.id) }}">Пройти</a><br>
+      <a class="btn btn-sm col-md-2" style="background-color: #772299; color: #FFFFFF;"
+         href="{{ url_for('tests.approve_test', test_id=test.id) }}">Одобрить</a>
+  </div>
+  {% endfor %}
+
+{% endblock %}

@@ -1,7 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
     <h1 class="text-center" style="padding: 2% 0 2% 0" >Страница Пользователя {{ g.user.login }}</h1>
+
+    {% if g.user.id == 1 %}
+        <a class="btn btn-info" href="{{ url_for('tests.approving_tests') }}">Одобрить тесты</a><br><br>
+    {% endif %}
     <a class="btn btn-info" href="{{ url_for('tests.creating_test') }}">Создать тест</a>
+
     <h1 style="padding: 1% 0 0 0">Мои тесты</h1>
     {% for test in user_tests %}
     <div class="card" style="padding: 5%; margin: 2% 0">
